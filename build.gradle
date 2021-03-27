@@ -1,6 +1,7 @@
 buildscript {
 	repositories {
 		gradlePluginPortal()
+        maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
 		maven { url "https://repo.spring.io/plugins-release" }
 	}
 	dependencies {
@@ -148,7 +149,9 @@ configure(allprojects) { project ->
 	}
 
 	repositories {
+        mavenLocal()
 		mavenCentral()
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/'}
 		maven { url "https://repo.spring.io/libs-spring-framework-build" }
 	}
 
