@@ -589,6 +589,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		Object exposedObject = bean;
 		try {
 			populateBean(beanName, mbd, instanceWrapper);
+			// 初始化bean，执行aware接口方法：BeanNameAware,BeanFactoryAware,ApplicationContextAware,BeanPostProcessor
 			exposedObject = initializeBean(beanName, exposedObject, mbd);
 		}
 		catch (Throwable ex) {
@@ -1755,11 +1756,13 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			}, getAccessControlContext());
 		}
 		else {
+			// 执行实现BeanNameAware,BeanClassLoaderAware,BeanFactoryAware接口的方法
 			invokeAwareMethods(beanName, bean);
 		}
 
 		Object wrappedBean = bean;
 		if (mbd == null || !mbd.isSynthetic()) {
+			// 通过BeanPostProcessor的实现类：ApplicationContextAwareProcessor来实现ApplicationContextAware接口方法的执行
 			wrappedBean = applyBeanPostProcessorsBeforeInitialization(wrappedBean, beanName);
 		}
 
@@ -1778,6 +1781,18 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		return wrappedBean;
 	}
 
+	/**
+	 * 方法描述: 执行实现的aware接口的方法，包括BeanNameAware,BeanClassLoaderAware,BeanFactoryAware
+	 * @param beanName
+	 * @param bean
+	 * @return void
+	 * @throws       
+	 * @author zdk
+	 * <br/><b>创建时间:</b>2021/4/4 10:13
+	 * <br/><b>修 改 人:</b>zdk
+	 * <br/><b>修改时间:</b>2021/4/4 10:13
+	 * @since  1.0.0
+	 */
 	private void invokeAwareMethods(String beanName, Object bean) {
 		if (bean instanceof Aware) {
 			if (bean instanceof BeanNameAware) {
